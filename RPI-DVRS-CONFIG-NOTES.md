@@ -19,6 +19,8 @@ sudo apt -y upgrade
 sudo apt -y install nano git screen build-essential libasio-dev libncurses-dev libssl-dev stm32flash libssl1.1
 ```
 
+# !!! 2024-07-08 --- THIS IS THE OLD PROCEDURE, I'M IN THE PROCESS OF WRITING A NEWER, EASIER ONE!  Please do not use.
+
 - create system user ```dvm``` and add user to ```dialout``` group (for access to serial port)
 ```
 sudo adduser --system --group --gecos "DVM" --home /opt/dvm dvm
