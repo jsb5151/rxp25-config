@@ -16,7 +16,7 @@ sudo sed -i 's/^console=serial0,115200 *//' /boot/firmware/cmdline.txt
 ```
 sudo apt -y update
 sudo apt -y upgrade
-sudo apt -y install nano git screen build-essential libasio-dev libncurses-dev libssl-dev stm32flash libssl1.1
+sudo apt -y install cmake nano git screen build-essential libasio-dev libncurses-dev libssl-dev stm32flash libssl1.1
 ```
 
 # !!! 2024-07-08 --- THIS IS THE OLD PROCEDURE, I'M IN THE PROCESS OF WRITING A NEWER, EASIER ONE!  Please do not perform commands below this line.
