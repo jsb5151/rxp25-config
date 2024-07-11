@@ -21,10 +21,10 @@ sudo apt -y install cmake nano git screen build-essential libasio-dev libncurses
 
 # !!! 2024-07-08 --- THIS IS THE OLD PROCEDURE, I'M IN THE PROCESS OF WRITING A NEWER, EASIER ONE!  Please do not perform commands below this line.
 
-- create system user ```dvm``` and add user to ```dialout``` group (for access to serial port)
+- create system user ```dvmhost``` and add user to ```dialout``` group (for access to serial port)
 ```
-sudo adduser --system --group --gecos "DVM" --home /opt/dvm dvm
-sudo usermod -aG dialout dvm
+sudo adduser --system --group --gecos "DVM" --home /opt/dvm dvmhost
+sudo usermod -aG dialout dvmhost
 ```
 
 - create directory structure and set proper uid/gid ownership:
@@ -32,8 +32,8 @@ sudo usermod -aG dialout dvm
 sudo mkdir /opt/dvm/bin
 sudo mkdir /opt/dvm/cfg
 sudo mkdir /var/log/dvm
-sudo chown -R dvm:dvm /opt/dvm
-sudo chown -R dvm:dvm /var/log/dvm
+sudo chown -R dvmhost:dvmhost /opt/dvm
+sudo chown -R dvmhost:dvmhost /var/log/dvm
 ```
 
 - installing dvmhost software (2 choices):
@@ -52,8 +52,8 @@ sudo chown -R dvm:dvm /var/log/dvm
     - TO BE PROVIDED VIA GITHUB FOR RXP25
 - set proper directory ownership once everything is in place:
 ```
-sudo chown -R dvm:dvm /opt/dvm
-sudo chown -R dvm:dvm /var/log/dvm
+sudo chown -R dvmhost:dvmhost /opt/dvm
+sudo chown -R dvmhost:dvmhost /var/log/dvm
 ```
 
 - create dvmhost.service for systemd in /usr/lib/systemd/system - file contents follows:
