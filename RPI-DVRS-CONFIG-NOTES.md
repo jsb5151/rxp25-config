@@ -19,25 +19,7 @@ sudo apt -y upgrade
 sudo apt -y install cmake nano git screen build-essential libasio-dev libncurses-dev libssl-dev stm32flash libssl1.1
 ```
 
-# !!! 2024-07-08 --- THIS IS THE OLD PROCEDURE, I'M IN THE PROCESS OF WRITING A NEWER, EASIER ONE!  Please do not perform commands below this line.
-
-- create system user ```dvmhost``` and add user to ```dialout``` group (for access to serial port)
-```
-sudo adduser --system --group --gecos "DVM" --home /opt/dvm dvmhost
-sudo usermod -aG dialout dvmhost
-```
-
-- create directory structure and set proper uid/gid ownership:
-```
-sudo mkdir /opt/dvm/bin
-sudo mkdir /opt/dvm/cfg
-sudo mkdir /var/log/dvm
-sudo chown -R dvmhost:dvmhost /opt/dvm
-sudo chown -R dvmhost:dvmhost /var/log/dvm
-```
-
-- installing dvmhost software (2 choices):
-   1. build dvmhost from source (slow):
+- installing dvmhost software: build softwar from source for first install.
 ```
        cd ~
        git clone https://github.com/DVMProject/dvmhost
@@ -45,34 +27,13 @@ sudo chown -R dvmhost:dvmhost /var/log/dvm
        mkdir build; cd build
        cmake -DENABLE_TCP_SSL ..
        make
-```
-   2. OR download dvmhost bins from Faulty’s repo (https://github.com/faultywarrior/dvmbins)
-- copy ```dvm*``` bins to ```/opt/dvm/bin```
-- copy dvm config files (```config.yml```, ```iden_table.dat```, ```talkgroup_rules.yml```, ```rid_acl.dat```, etc) to ```/opt/dvm/cfg```
-    - TO BE PROVIDED VIA GITHUB FOR RXP25
-- set proper directory ownership once everything is in place:
-```
-sudo chown -R dvmhost:dvmhost /opt/dvm
-sudo chown -R dvmhost:dvmhost /var/log/dvm
+       sudo make old_install
+       sudo make old_install.service
 ```
 
-- create dvmhost.service for systemd in /usr/lib/systemd/system - file contents follows:
-```
-[Unit]
-Description=DVMProject Host Radio Service
-After=syslog.target network.target
+Files will be located in /opt/dvm, with the binaries in /opt/dvm/bin.  Also, a systemd service will be added so you can automatically get it started upon boot.
 
-[Service]
-User=dvm
-Type=forking
-ExecStart=/opt/dvm/bin/dvmhost -c /opt/dvm/cfg/config.yml
-Restart=on-abnormal
-
-[Install]
-WantedBy=multi-user.target
-```
-
-- customize ```config.yml``` with the right parameters:
+- customize ```config.yml``` with the right parameters (templates will be provided to you by the admins to help with this):
   - ensure ALL file paths are fully qualified paths:
      - ```filePath```, ```activityFilePath```, ```file:``` entries under ```iden_table:```, ```radio_id:``` and ```talkgroup_id:``` sections
   - set the following parameters in ```config.yml``` (only partial options shown, please edit your existing templated file) for the network section:
