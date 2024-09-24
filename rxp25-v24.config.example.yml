@@ -1,0 +1,623 @@
+#
+# Digital Voice Modem - Host Software Configuration
+# RXP25 TEMPLATE FOR QUANTAR/V.24 (by VA2XB)
+# @package DVM / Host Software
+#
+
+# Flag indicating whether the host will run as a background or foreground task.
+daemon: true
+
+#
+# Logging Configuration
+#
+#   Logging Levels:
+#     1 - Debug
+#     2 - Message
+#     3 - Informational
+#     4 - Warning
+#     5 - Error
+#     6 - Fatal
+#
+log:
+    # Console display logging level (used when in foreground).
+    displayLevel: 1
+    # File logging level.
+    fileLevel: 1
+    # Flag indicating file logs should be sent to syslog instead of a file.
+    useSyslog: false
+    # Full path for the directory to store the log files.
+    filePath: /var/log/dvm
+    # Full path for the directory to store the activity log files.
+    activityFilePath: /var/log/dvm
+    # Log filename prefix.
+    fileRoot: DVM
+
+#
+# Network Configuration
+#
+network:
+    # Flag indicating whether or not host networking is enabled.
+    enable: true
+    # Network Peer ID
+    id: ###!!!REPLACE WITH ID
+    # Hostname/IP address of the FNE to connect to.
+    address: ###!!!REPLACE WITH FNE IP
+    # Port number of the FNE to connect to.
+    port: 62031
+    # FNE access password.
+    password: ###!!!REPLACE WITH PW
+
+    # Flag indicating whether or not host endpoint networking is encrypted.
+    encrypted: true
+    # AES-256 32-byte Preshared Key
+    #   (This field *must* be 32 hex bytes in length or 64 characters
+    #    0 - 9, A - F.)
+    presharedKey: "000102030405060708090A0B0C0D0E0F000102030405060708090A0B0C0D0E0F"
+
+    # Maximum allowable DMR network jitter.
+    jitter: 360
+
+    # Flag indicating whether DMR slot 1 traffic will be passed.
+    slot1: true
+    # Flag indicating whether DMR slot 2 traffic will be passed.
+    slot2: true
+
+    # Flag indicating whether the local host lookup tables (RID, TGID, etc) will be updated from the network.
+    updateLookups: true
+    # Flag indicating whether the local host lookup tables will be saved to local files when updated from the network
+    # This is handy if your site occasionally operates in site trunking mode without a connection to the FNE
+    saveLookups: true
+    # Flag indicating whether or not the host activity log will be sent to the network.
+    allowActivityTransfer: false
+    # Flag indicating whether or not the host diagnostic log will be sent to the network.
+    allowDiagnosticTransfer: false
+    # Flag indicating whether or not the host status will be sent to the network.
+    allowStatusTransfer: true
+
+    # Flag indicating whether or not verbose debug logging is enabled.
+    debug: false
+
+    # Flag indicating whether or not REST API is enabled.
+    restEnable: true
+    # IP address of the network interface to listen for REST API on (or 0.0.0.0 for all).
+    restAddress: 0.0.0.0
+    # Port number for REST API to listen on.
+    restPort: 9991
+    # Flag indicating whether or not REST API is operating in SSL mode.
+    restSsl: false
+    # HTTPS/TLS certificate.
+    restSslCertificate: web.crt
+    # HTTPS/TLS key file.
+    restSslKey: web.key
+    # REST API authentication password.
+    restPassword: "RXP25.api"
+    # Flag indicating whether or not verbose REST API debug logging is enabled.
+    restDebug: false
+
+#
+# Digital Protocol Configuration
+#
+protocols:
+    #
+    # Digital Mobile Radio
+    #
+    dmr:
+        # Flag indicating whether or not the protocol is enabled.
+        enable: false
+
+        #
+        # DMR Roaming Beacon (and TSCC) Timing Configuration
+        #
+        beacons:
+            # Flag indicating whether or not DMR roaming beacons are enabled.
+            enable: false
+            # Time between roaming beacon bursts. (seconds)
+            interval: 60
+            # Amount of time to transmit roaming beacon. (seconds)
+            duration: 3
+          
+        #
+        # DMR Timeslot Control Channel (TSCC) Configuration
+        #
+        control: 
+            # Flag indicating whether or not this TSCC is a dedicated CC.
+            dedicated: false
+            # Flag indicating whether or not TSCC is enabled.
+            enable: false
+            # DMR slot number to transmit TSCC data on.
+            slot: 1
+            # Flag indicating whether or not the source ID validation before granting disabled.
+            disableGrantSourceIdCheck: false
+        
+        # Flag indicating whether or not received RF embedded LC data only should be transmitted.
+        embeddedLCOnly: false
+        # Flag indicating whether talker alias data should be dumped to the log.
+        dumpTAData: true
+        # Flag indicating whether verbose dumping of DMR data packets is enabled.
+        dumpDataPacket: false
+        # Flag indicating whether or not this host will repeat DMR data traffic.
+        repeatDataPacket: true
+        # Flag indicating whether verbose dumping of DMR CSBK data is enabled.
+        dumpCsbkData: false
+        # Flag indicating unit registration will be verified after some operations.
+        verifyReg: false
+        # Flag indicating automated 12-hour idle unit registration timeout is disabled.
+        disableUnitRegTimeout: false
+        # Specifies the random wait delay for a subscriber.
+        # (This should not be altered.)
+        nRandWait: 8
+        # Specifies the random back-off count in DMR TDMA frames.
+        # (This should not be altered.)
+        backOff: 1
+        # Amount of time to hang after a voice call.
+        callHang: 5
+        # Amount of time to continue transmitting after the end of traffic.
+        txHang: 8
+        # BER/Error threshold for silencing voice packets. (0 or 141 disables)
+        silenceThreshold: 21
+        # Maximum number of lost frames before terminating a call.
+        frameLossThreshold: 2
+        # Internal data queue size (in DMR packets).
+        queueSize: 31
+        # Flag indicating whether or not verbose logging is enabled.
+        verbose: true
+        # Flag indicating whether or not debug logging is enabled.
+        debug: false
+    
+    #
+    # Project 25
+    #
+    p25:
+        # Flag indicating whether or not the protocol is enabled.
+        enable: true
+        # Sets the number of TDU preambles to transmit at the start of a transmission.
+        tduPreambleCount: 6
+
+        #
+        # P25 Control Channel Configuration
+        #
+        control:
+            # Flag indicating whether or not TSBK data support is enabled.
+            enable: true
+            # Flag indicating whether or not TSBK requets will optionally acknowledge incoming requests.
+            ackRequests: true
+            # Flag indicating whether or not this CC is a dedicated CC.
+            dedicated: false
+            # Flag indicating whether CC data will be broadcast.
+            broadcast: false
+            # Time between non-dedicated CC broadcasts. (seconds)
+            interval: 300
+            # Amount of time to transmit non-dedicated CC broadcasts. (seconds)
+            duration: 2
+            # Flag to disable TSDU triple-block transmissions and instead transmit single-block TSDUs.
+            disableTSDUMBF: false
+            # Flag to enable optional TIME_DATE_ANNC TSBK during a CC broadcast.
+            enableTimeDateAnn: true
+            # Flag indicating whether or not the source ID validation before granting disabled.
+            disableGrantSourceIdCheck: false
+            # Flag indicating immediate TSDUs will be sent twice.
+            redundantImmediate: true
+            # Flag indicating whether redundant grant responses should be transmitted.
+            redundantGrantTransmit: false
+
+        # Flag indicating whether or not to ignore voice frames on a control channel
+        #   This comes in handy if you're running non-dedicated with an FNE so the CC doesn't repeat voice traffic.
+        controlOnly: false
+        # Flag indicating whether or not a voice HDU will transmitted at the start of a call from the network.
+        disableNetworkHDU: false
+        # Flag indicating whether or not network calls will generate a channel grant.
+        #   (This applies only in conventional operations where channel granting is utilized and RF-only talkgroup
+        #    steering is required.)
+        disableNetworkGrant: false
+        # Flag indicating that the host will attempt to automatically inhibit unauthorized RIDs (those not in the
+        # RID ACL list).
+        inhibitUnauthorized: false
+        # Flag indicating the fallback legacy group grant for radios that do not support group affilition to 
+        # have group grants transmitted. (Useful for alerting the FNE to affiliations to TGIDs for radios that
+        # do not properly support group affiliation.)
+        legacyGroupGrnt: true
+        # Flag indicating the fallback legacy group registration. (Same as above except for group affiliations.)
+        legacyGroupReg: true
+        # Flag indicating the host should send a network grant demand TDU for conventional traffic.
+        convNetGrantDemand: true
+        # Flag indicating the host should verify group affiliation.
+        verifyAff: false
+        # Flag indicating the host should verify unit registration.
+        verifyReg: false
+        # Flag indicating automated 12-hour idle unit registration timeout is disabled.
+        disableUnitRegTimeout: false
+        # Flag indicating the host requires LLA verification before allowing unit registration.
+        requireLLAForReg: false
+        # Flag indicating whether verbose dumping of P25 data packets is enabled.
+        dumpDataPacket: false
+        # Flag indicating whether or not this host will repeat P25 data traffic.
+        repeatDataPacket: true
+        # Flag indicating whether verbose dumping of P25 TSBK data is enabled.
+        dumpTsbkData: false
+        # Amount of time to hang after a voice call.
+        callHang: 5
+        # Flag indicating whether or not the host will acknowledge status packets.
+        noStatusAck: false
+        # Flag indicating whether or not the host will acknowledge message packets.
+        noMessageAck: false
+        # Flag indicating that unit-to-unit availiability checks should be performed for a private call.
+        unitToUnitAvailCheck: true
+        # Flag indicating explicit source ID support is enabled.
+        allowExplicitSourceId: true
+        # Flag indicating whether or not the host will respond to SNDCP data requests.
+        sndcpSupport: false
+        # BER/Error threshold for silencing voice packets. (0 or 1233 disables)
+        silenceThreshold: 124
+        # Maximum number of lost frames before terminating a call.
+        frameLossThreshold: 6
+        # Internal data queue size (in P25 packets).
+        queueSize: 12
+        # Flag indicating whether or not verbose logging is enabled.
+        verbose: true
+        # Flag indicating whether or not debug logging is enabled.
+        debug: false
+
+    #
+    # Next Generation Digital Narrowband
+    #
+    nxdn:
+        # Flag indicating whether or not the protocol is enabled.
+        enable: false
+
+        #
+        # NXDN Control Channel Configuration
+        #
+        control:
+            # Flag indicating whether or not CC is enabled.
+            enable: false
+            # Flag indicating whether or not this CC is a dedicated CC.
+            dedicated: false
+            # Flag indicating whether CC data will be broadcast.
+            broadcast: true
+            # Time between non-dedicated CC broadcasts. (seconds)
+            interval: 300
+            # Amount of time to transmit non-dedicated CC broadcasts. (seconds)
+            duration: 1
+            # Flag indicating whether or not the source ID validation before granting disabled.
+            disableGrantSourceIdCheck: false
+
+        # Flag indicating the host should verify group affiliation.
+        verifyAff: false
+        # Flag indicating the host should verify unit registration.
+        verifyReg: false
+        # Flag indicating automated 12-hour idle unit registration timeout is disabled.
+        disableUnitRegTimeout: false
+        # Flag indicating whether verbose dumping of NXDN RCCH data is enabled.
+        dumpRcchData: false
+        # Amount of time to hang after a voice call.
+        callHang: 5
+        # BER/Error threshold for silencing voice packets. (0 or 144 disables)
+        silenceThreshold: 14
+        # Maximum number of lost frames before terminating a call.
+        frameLossThreshold: 4
+        # Internal data queue size (in NXDN packets).
+        queueSize: 31
+        # Flag indicating whether or not verbose logging is enabled.
+        verbose: true
+        # Flag indicating whether or not debug logging is enabled.
+        debug: false
+
+#
+# System Configuration
+#
+system:
+    # Textual label of this host.
+    identity: ###!!!REPLACE WITH THE SITE CALLSIGN/TEXT ID
+    # Total call transmit time maximum. (seconds)
+    timeout: 300
+    # Flag indicating whether or not the host is operating in duplex (simultaneous Rx/Tx) or simplex operation.
+    duplex: true
+    # Flag indicating whether or not the host should utilize the same frequency in simplex operation 
+    # (instead of split frequency).
+    simplexSameFrequency: false
+    # Amount of time the host will "hang" on a digital mode in multi-mode operation. (seconds)
+    modeHang: 10
+    # Amount of time the host will "hang" on a RF received digital mode in multi-mode operation. (seconds)
+#    rfModeHang: 10
+    # Amount of time the host will "hang" on a network received digital mode in multi-mode operation. (seconds)
+#    netModeHang: 10
+    # Flag indicating the host is operating in a single digital mode.
+    fixedMode: true
+    # Amount of time the host will "hang" on the last TGID received via RF before returning to allowing all 
+    # TGID traffic. This applies only to network traffic, it essentially allows time-based filtering of network
+    # traffic for the last TGID received.
+    rfTalkgroupHang: 10
+    # Sets the amount of delay between "ticks" of the processing loop when the host is active (i.e. 
+    # processing traffic). (ms) [Note: Default value is recommend, normally this should not be changed.]
+    activeTickDelay: 5
+    # Sets the amount of delay between "ticks" of the processing loop when the host is idle (i.e. not 
+    # processing traffic). (ms) [Note: Default value is recommend, normally this should not be changed.]
+    idleTickDelay: 5
+    # Sets the local time offset from GMT.
+    localTimeOffset: -6
+
+    #
+    # Location Information
+    # (This is used mainly for reporting the location of the host to a connected network.)
+    #
+    info:
+        # Latitude.
+        latitude: ###!!!REPLACE WITH COORDINATES
+        # Longitude.
+        longitude: ###!!!REPLACE WITH COORDINATES
+        # Height (in meters).
+        height: ###!!!REPLACE WITH COORDINATES
+        # Transmit Power (in watts).
+        power: ###!!!REPLACE WITH OUTPUT POWER
+        # Textual location for this host.
+        location: ###!!!REPLACE WITH CITY, STATE/PROVINCE
+
+    #
+    # Site Configuration
+    #
+    config:
+        # Flag indicating whether or not this host is authoritative (i.e. will automatically handle channel grant) for TGID operations.
+        authoritative: true
+        # Flag indicating whether or not this host acts as a supervisor (i.e. will automatically handle permission) for voice channel TGID permission.
+        supervisor: false
+
+        # Channel Identity (corresponds to the appropriate entry in the iden_table file).
+        channelId: ###!!!REPLACE WITH CHANNELID FROM IDEN_TABLE
+        # Channel Number (used to calculate actual host frequency based on the identity table).
+        channelNo: ###!!!REPLACE WITH CHANNEL NUMBER FROM IDEN_TABLE (HEX VALUE!)
+
+        #
+        # Control Channel
+        # Note: These parameters are used by a voice channel to communicate back to a
+        #   control channel to give the control channel "real time" traffic channel updates.
+        #   These parameters should be left default for dedicated control channels.
+        #
+        controlCh:
+            # REST API IP Address for control channel. (If blank, notifications are disabled.)
+            restAddress: 
+            # REST API Port number for control channel. (If 0, notifications are disabled.)
+            restPort: 0
+            # REST API access password for control channel.
+            restPassword: "RXP25.api"
+            # Flag indicating whether or not REST API is operating in SSL mode.
+            restSsl: false
+            # Flag indicating voice channels will notify the control channel of traffic status.
+            notifyEnable: false
+            # Amount of time between network presence announcements. (seconds)
+            # NOTE: This value applies to VC -> CC and CC -> FNE presence notification messages.
+            presence: 120
+
+        #
+        # Voice Channels
+        #
+        voiceChNo:
+              # Channel Identity (corresponds to the appropriate entry in the iden_table file).
+            - channelId: ###!!!REPLACE WITH CHANNELID FROM IDEN_TABLE
+              # Channel Number (used to calculate actual host frequency based on the identity table).
+              channelNo: ###!!!REPLACE WITH CHANNEL NUMBER FROM IDEN_TABLE (HEX VALUE!)
+              # REST API IP Address for voice channel.
+              restAddress: 127.0.0.1
+              # REST API Port number for voice channel.
+              restPort: 9991
+              # REST API access password for voice channel.
+              restPassword: "RXP25.api"
+              # Flag indicating whether or not REST API is operating in SSL mode.
+              restSsl: false
+
+        secure:
+            # AES-128 16-byte Key (used for LLA)
+            #   (This field *must* be 16 hex bytes in length or 32 characters
+            #    0 - 9, A - F.)
+            key: "000102030405060708090A0B0C0D0E0F"
+
+        # DMR Color Code.
+        colorCode: 1
+        # P25 Network Access Code (NAC). (Rx/Tx)
+        nac: 293
+        # P25 Network Access Code (NAC). (Overrides the above for Tx when set.)
+#         txNAC: 293
+        # NXDN Random Access Number.
+        ran: 1
+
+        # Patch Super Group.
+        pSuperGroup: FFFE
+        # Announcment Talkgroup Group.
+        announcementGroup: FFFE
+
+        # DMR network ID.
+        dmrNetId: 1
+        # P25 Network ID (WACN).
+        netId: 0CA25
+        # P25/NXDN System ID.
+        sysId: C25
+        # P25 RFSS (RF Sub-System) ID.
+        rfssId: ###!!!REPLACE WITH YOUR GIVEN RFSS ID (HEX)
+        # DMR/P25/NXDN Site ID.
+        siteId: ###!!!REPLACE WITH YOUR GIVEN SITE ID (HEX)
+
+    #
+    # CW ID Configuration
+    #
+    cwId:
+        # Flag indicating whether or not CWID is enabled.
+        enable: false # DO NOT ENABLE THIS ON A QUANTAR/V.24/ASTROTAC
+        # Amount of time between CWID transmissions. (minutes)
+        time: 15
+        # Callsign to be transmitted.
+        callsign: ###!!!REPLACE WITH CWID CALLSIGN
+
+    #
+    # Modem Configuration
+    #
+    modem:
+        #
+        # Protocol Configuration
+        #
+        protocol:
+            # Modem port type.
+            type: "uart" # Valid values are "null", and "uart"
+            # Modem mode.
+            mode: "dfsi" # Valid values are "dvm", and "dfsi"
+
+            uart:
+                # UART/RS232 serial port device.
+                port: /dev/ttyACM0
+                # UART/RS232 serial port speed. (The default speed of 115200, should not be
+                # changed unless the speed is also changed in the firmware of the modem.)
+                speed: 115200
+        
+        # Flag indicating whether or not the recieved signal is polarity inverted.
+        rxInvert: false
+        # Flag indicating whether or not the transmitted signal is polarity inverted.
+        txInvert: false
+        # Flag indicating whether or not the modem PTT signal should be active low.
+        pttInvert: false
+        # Flag indicating whether or not the modem DC noise blocker filter is enabled.
+        dcBlocker: true
+        # Flag indicating whether or not the modem COS signal should lockout transmit.
+        cosLockout: false
+        # Number of FDMA preambles to transmit before data.
+        fdmaPreamble: 80
+        # Amount of time to wait before starting DMR transmissions after a signal is received.
+        dmrRxDelay: 7
+        # Amount of packet correlations that should occur before P25 data is returned from the modem to the host.
+        # (Note: Changing this value will impact P25 protocol stability, and should not be altered.)
+        p25CorrCount: 8
+        # Size (in bytes) of the DMR transmit FIFO buffer.
+        dmrFifoLength: 505
+        # Size (in bytes) of the P25 transmit FIFO buffer.
+        p25FifoLength: 522
+        # Size (in bytes) of the NXDN transmit FIFO buffer.
+        nxdnFifoLength: 538
+
+        #
+        # Hotspot Modem Configuration
+        #
+        hotspot:
+            # DMR Discriminator Bandwidth Adjustment.
+            dmrDiscBWAdj: 0 # Valid values between -128 and 128
+            # DMR Post Demodulator Bandwidth Adjustment.
+            dmrPostBWAdj: 0 # Valid values between -128 and 128
+            # P25 Discriminator Bandwidth Adjustment.
+            p25DiscBWAdj: 0 # Valid values between -128 and 128
+            # P25 Post Demodulator Bandwidth Adjustment.
+            p25PostBWAdj: 0 # Valid values between -128 and 128
+            # NXDN Discriminator Bandwidth Adjustment.
+            nxdnDiscBWAdj: 0 # Valid values between -128 and 128
+            # NXDN Post Demodulator Bandwidth Adjustment.
+            nxdnPostBWAdj: 0 # Valid values between -128 and 128
+            # LNA Gain Mode.
+            adfGainMode: 2 # 0 - Auto, 1 - Auto High Lin, 2 - Low, 3 - High
+            # Flag indicating whether the ADF7021's automatic frequency correction is enabled.
+            afcEnable: true
+            # Don't change this. See the ADF7021 datasheet for more information.
+            afcKI: 13
+            # Don't change this. See the ADF7021 datasheet for more information.
+            afcKP: 5
+            # Sets the maximum frequency correction range of the ADF7021.
+            # (It is highly recommended *not* to alter this.)
+            afcRange: 1
+            # Sets the transmit frequency offset. (in Hz)
+            txTuning: 0
+            # Sets the receive frequency offset. (in Hz)
+            rxTuning: 0
+
+        #
+        # Repeater Modem Configuration
+        #
+        repeater:
+            # DMR +3/-3 symbol level adjustment.
+            dmrSymLvl3Adj: 0 # Valid values between -128 and 128
+            # DMR +1/-1 symbol level adjustment.
+            dmrSymLvl1Adj: 0 # Valid values between -128 and 128
+            # P25 +3/-3 symbol level adjustment.
+            p25SymLvl3Adj: 0 # Valid values between -128 and 128
+            # P25 +1/-1 symbol level adjustment.
+            p25SymLvl1Adj: 0 # Valid values between -128 and 128
+            # NXDN +3/-3 symbol level adjustment.
+            nxdnSymLvl3Adj: 0 # Valid values between -128 and 128
+            # NXDN +1/-1 symbol level adjustment.
+            nxdnSymLvl1Adj: 0 # Valid values between -128 and 128
+
+        #
+        # (Optional) Software Potentiometer Configuration
+        # [Note: This only applies to DVM board which include such support.]
+        #
+        softpot:
+            rxCoarse: 127 # Valid values between 0 and 255
+            rxFine: 127 # Valid values between 0 and 255
+            txCoarse: 127 # Valid values between 0 and 255
+            txFine: 127 # Valid values between 0 and 255
+            rssiCoarse: 127 # Valid values between 0 and 255
+            rssiFine: 127 # Valid values between 0 and 255
+
+        dfsi:
+            # RT/RT flag enabled (0x02) or disabled (0x04)
+            rtrt: true
+            # Use the DIU source flag (0x00) instead of the quantar source flag (0x02)
+            diu: true
+            # Jitter buffer length in ms
+            jitter: 200
+            # Timer which will reset local/remote call flags if frames aren't received longer than this time in ms
+            callTimeout: 200
+
+        # Sets received the signal offset from DC.
+        rxDCOffset: 0 # Valid values between -128 and 128
+        # Sets transmitted the signal offset from DC.
+        txDCOffset: 0 # Valid values between -128 and 128
+        # Sets the received signal modulation level.
+        rxLevel: 50
+        # Sets the transmitted signal modulation level.
+        txLevel: 50
+        # Sets the transmitted CWID signal modulation level.
+#        cwIdTxLevel: 50
+        # Sets the transmitted DMR signal modulation level.
+#        dmrTxLevel: 50
+        # Sets the transmitted P25 signal modulation level.
+#        p25TxLevel: 50
+        # Sets the transmitted NXDN signal modulation level.
+#        nxdnTxLevel: 50
+        rssiMappingFile: /opt/dvm/cfg/RSSI.dat
+        # Deprecated. Sets the playout time in seconds between sending buffered data to the modem.
+        packetPlayoutTime: 10
+        # Flag indicating that modem resets due to ADC or DAC overflows is disabled.
+        disableOFlowReset: false
+        # Flag indicating that the modem configuration area data should be ignored.
+        ignoreModemConfigArea: false
+        # Flag indicating whether verbose dumping of the modem status is enabled.
+        dumpModemStatus: false
+        # Flag indicating whether or not trace logging is enabled.
+        trace: false
+        # Flag indicating whether or not debug logging is enabled.
+        debug: false
+
+    #
+    # Channel Identity Table Configuration
+    #
+    iden_table:
+        # Full path to the identity table file.
+        file: /opt/dvm/cfg/iden_table.dat
+        # Amount of time between updates of identity table file. (minutes)
+        time: 30
+
+    #
+    # Radio ID ACL Configuration
+    #
+    radio_id:
+        # Full path to the RID ACL file.
+        file: /opt/dvm/cfg/rid_acl.dat
+        # Amount of time between updates of RID ACL file. (minutes)
+        time: 2
+        # Flag indicating whether or not RID ACLs are enforced.
+        acl: false
+
+    #
+    # Talkgroupd ID ACL Configuration
+    #
+    talkgroup_id:
+        # Full path to the talkgroup rules file.
+        file: /opt/dvm/cfg/talkgroup_rules.yml
+        # Amount of time between updates of talkgroup rules file. (minutes)
+        time: 2
+        # Flag indicating whether or not TGID ACLs are enforced.
+        acl: true
