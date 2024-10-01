@@ -1,0 +1,14 @@
+# RXP25 BANDPLAN IDENTITY TABLE
+# This file sets the valid bandplan identity table.
+# (It is recommended to use the included iden_channel_calc.py Python script
+# to generate entries for this file.)
+#
+# It is the responsibility of the repeater/hotspot operator to ensure that the frequencies used for TX/RX are legal and are appropriately licensed.
+#   
+# ChId,Base Freq,Spacing (khz),Input Offset (mhz),Bandwidth (khz),<newline>
+1,144000000,5,0.600,12.5,
+2,144000000,5,-0.600,12.5,
+3,440000000,5,5.000,12.5,
+4,440000000,5,-5.000,12.5,
+8,851006250,6.25,-45.000,12.5,
+9,902000000,12.5,-25.000,12.5,
