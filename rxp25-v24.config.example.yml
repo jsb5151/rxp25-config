@@ -22,7 +22,7 @@ log:
     # Console display logging level (used when in foreground).
     displayLevel: 1
     # File logging level.
-    fileLevel: 1
+    fileLevel: 5
     # Flag indicating file logs should be sent to syslog instead of a file.
     useSyslog: false
     # Full path for the directory to store the log files.
@@ -68,9 +68,9 @@ network:
     # This is handy if your site occasionally operates in site trunking mode without a connection to the FNE
     saveLookups: true
     # Flag indicating whether or not the host activity log will be sent to the network.
-    allowActivityTransfer: false
+    allowActivityTransfer: true
     # Flag indicating whether or not the host diagnostic log will be sent to the network.
-    allowDiagnosticTransfer: false
+    allowDiagnosticTransfer: true
     # Flag indicating whether or not the host status will be sent to the network.
     allowStatusTransfer: true
 
